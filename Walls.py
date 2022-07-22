@@ -5,6 +5,8 @@ def wallGenerator(status):
     status.walls = []
     for xCoordinate in range(status.boardWidth):
         for yCoordinate in range(status.boardHeight):
+            if (xCoordinate == 2 and yCoordinate == 2):
+                continue
             coinFlip = bernoulli(status.wallProbability).rvs(1)[0]
             if (coinFlip == 1):
                 alreadyThere = False
@@ -26,6 +28,8 @@ def choosePrizeLocation(status):
     while (True):
         xprize = random.choice(list(range(status.boardWidth)))
         yprize = random.choice(list(range(status.boardHeight)))
+        if (xprize == 2 and yprize == 2):
+            continue
         alreadyThere = False
         for point in status.walls:
             if (point.x == xprize and point.y == yprize):

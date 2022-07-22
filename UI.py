@@ -1,5 +1,10 @@
 from Components import Point
-def display_game(grid_sizex, grid_sizey, walls, xprize, yprize, currentX, currentY):
+def display_game(grid_sizex, grid_sizey, status):
+    walls = status.walls
+    xprize = status.xPrize
+    yprize = status.yPrize
+    currentX = status.receiverX
+    currentY = status.receiverY
     ans = ''
     for y in range(grid_sizey):
         for x in range(grid_sizex):
@@ -26,4 +31,4 @@ def validation(walls, xprize, yprize, currentX, currentY):
         assert(point.x != xprize or point.y != yprize)
         assert(point.x != currentX or point.y != currentY)
 
-ans = display_game(4,4,[Point(0,0), Point(1,1)], 2,3,1,2)
+# ans = display_game(4,4,[Point(0,0), Point(1,1)], 2,3,1,2)

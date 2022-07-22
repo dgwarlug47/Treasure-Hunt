@@ -1,5 +1,7 @@
 import enum
 from shutil import move
+import json
+
 
 class Movement(enum.Enum):
     up = 1
@@ -16,7 +18,7 @@ class SenderState(State):
         self.xprize = xprize
         self.yprize = yprize
 
-        self.id = "xprize: " + str(xprize) + ", yprize:" + str(yprize) 
+        self.id = "sender id: xprize: " + str(xprize) + ", yprize:" + str(yprize) 
 
 class ReceiverState(State):
     def __init__(self, currentX, currentY, message) -> None:
@@ -24,7 +26,7 @@ class ReceiverState(State):
         self.currentY = currentY
         self.message = message
 
-        self.id = "x:" + str(self.currentX) + ", y:" + str(self.currentY) + ", message: " + str(self.message)
+        self.id = "receiver id: x:" + str(self.currentX) + ", y:" + str(self.currentY) + ", message: " + str(self.message)
 
 class Action():
     def __init__(self) -> None:
@@ -58,13 +60,22 @@ class Status():
         self.numberOfEpisodes = numberOfEpisodes
         self.boardWidth = 5
         self.boardHeight = 5
-        self.wallProbability = 4/25
+        self.wallProbability = None
         self.xPrize = None
         self.yPrize =  None
         self.walls = []
 
         self.receiverX = None
         self.receiverY = None
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, 
+            sort_keys=True, indent='\n')
+
+
+    def __repr__(self) -> str:
+        return json.dumps(self.toJSON())
+
 
 class LearningStage(enum.Enum):
     train = 1

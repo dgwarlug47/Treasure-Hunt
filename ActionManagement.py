@@ -7,10 +7,11 @@ import random
 import math
 
 from Components import LearningStage, Movement, ReceiverAction
+from QLearning import QTable
 
 class StandardActionManagement():
-    def __init__(self, qtable, actions) -> None:
-        self.qtable = qtable
+    def __init__(self, states, actions, numberOfEpisodes) -> None:
+        self.qtable = QTable(states, actions, numberOfEpisodes)
         self.actions = actions
         self.epsilon = 0.2
 

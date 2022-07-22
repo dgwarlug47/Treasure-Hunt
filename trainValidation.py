@@ -1,10 +1,11 @@
 from curses import cbreak
 import enum
 from scipy.stats import bernoulli
-from ActionManagement import ActionManagement, CheatReceiverActionManagement, StandardActionManagement
+from ActionManagement import  CheatReceiverActionManagement, StandardActionManagement
 from Components import LearningStage, Point, ReceiverState, SenderAction, SenderState, Status, Movement
 from QLearning import QTable
 from Walls import wallGenerator, choosePrizeLocation, isItInTheWalls
+from UI import display_game
 
 def startNewEpisode(status):
     wallGenerator(status)
@@ -17,8 +18,16 @@ class Question(enum.Enum):
     d = 4
 
 question = Question.a
-numberOfEpisodes = 100
-senderInputSize = 5
+gridSizeX = 5
+gridSizeY = 5
+numberOfEpisodes = 5
+earlyBreak = False
+
+if (question == Question.a):
+    senderInputSize = 1
+else:
+    senderInputSize = 5
+
 terminationProbability = 1 - 0.95
 
 receiverPossibleActions = [Movement.up, Movement.down, Movement.left, Movement.right]
@@ -28,32 +37,49 @@ recieverPossibleStates = []
 for x in range(5):
     for y in range(5):
         for index in range(1, senderInputSize + 1):
-            recieverPossibleStates.add(ReceiverState(x,y,str(index)))
+            recieverPossibleStates.append(ReceiverState(x,y,str(index)))
 
 senderPossibleActions = []
 
 for index in range(1, senderInputSize + 1):
     senderPossibleActions.append(SenderAction(str(index)))
 
+senderPossibleStates = []
 
-receiverQtable = QTable()
-senderQtable = QTable()
-sender = StandardActionManagement(senderQtable, list(range(1, senderInputSize + 1)))
-if (question == Question.a):
-    receiver = CheatReceiverActionManagement()
-else:
-    receiver = StandardActionManagement(receiverQtable, receiverPossibleActions)
+for x in range(5):
+    for y in range(5):
+        senderPossibleStates.append(SenderState(x,y))
+
 
 status = Status(numberOfEpisodes)
 
+sender = StandardActionManagement(senderPossibleStates, senderPossibleActions, numberOfEpisodes)
+if (question == Question.a):
+    receiver = CheatReceiverActionManagement()
+else:
+    receiver = StandardActionManagement(recieverPossibleStates, receiverPossibleActions, numberOfEpisodes)
+
+if (question == Question.a):
+    status.wallProbability = 0
+if (question != Question.a):
+    status.wallProbability = 4/25
+counter = 0
 for episode in range(status.numberOfEpisodes):
+    if (earlyBreak and counter > 5):
+        break
+    print("start new episode: " + str(episode))
     startNewEpisode(status)
     senderState = SenderState(status.xPrize, status.yPrize)
-    message = sender.choose(senderState)
+    message = sender.choose(senderState, LearningStage.train)
+    # TODO what if grid size changes
     status.receiverX = 2
     status.receiverY = 2
     reward = None
     while(True):
+        display_game(gridSizeX, gridSizeY, status)
+        counter += 1
+        if (earlyBreak and counter > 5):
+            break
         reward = None
         coinFlip = bernoulli(status.wallProbability).rvs(1)[0]
         if (coinFlip == 1):
@@ -69,27 +95,29 @@ for episode in range(status.numberOfEpisodes):
 
             desiredX = status.receiverX
             desiredY = status.receiverY
-            if direction == Movement.up:
-                desiredY = desiredY + 1
-            if direction == Movement.down:
+            if direction.movement == Movement.up:
                 desiredY = desiredY - 1
-            if direction == Movement.left:
+            if direction.movement == Movement.down:
+                desiredY = desiredY + 1
+            if direction.movement == Movement.left:
                 desiredX = desiredX - 1
-            if direction == Movement.right:
+            if direction.movement == Movement.right:
                 desiredX = desiredX + 1
+            print("direction", direction.movement)
+
+            print("desire", desiredX, desiredY)
             
             if (desiredX < 0 or desiredX > 4 or desiredY < 0 or desiredY > 4):
-                continue
+                print("it is me mario")
+                pass
 
-            if (isItInTheWalls(status.receiverX)):
-                continue
+            elif (isItInTheWalls(desiredX, desiredY, status.walls)):
+                print("again with the sickeness")
+                pass
+            else:
+                status.receiverX = desiredX
+                status.receiverY = desiredY
 
-            status.currentX = desiredX
-            status.currentY = desiredY
-
-            if (status.currentX == status.xPrize and status.currentY == status.yPrize):
+            if (status.receiverX == status.xPrize and status.receiverY == status.yPrize):
                 reward = 1
                 break
-
-            
-    
