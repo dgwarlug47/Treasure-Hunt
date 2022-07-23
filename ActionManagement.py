@@ -1,5 +1,4 @@
 from operator import le
-import re
 from shutil import move
 from numpy import rec
 from scipy.stats import bernoulli
@@ -30,9 +29,12 @@ class StandardActionManagement():
         bestAction = None
         bestQValue = - math.inf
         for action in self.actions:
-            if (bestQValue > self.qtable.get(state, action)):
+            if (bestQValue < self.qtable.get(state, action)):
                 bestAction = action
                 bestQValue = self.qtable.get(state, action)
+
+        if (bestAction == None):
+            print("what is going on?")
         return bestAction
 
 class CheatReceiverActionManagement():

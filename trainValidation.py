@@ -4,7 +4,7 @@ from this import s
 from turtle import st
 from scipy.stats import bernoulli
 from ActionManagement import StandardActionManagement
-from Components import ComputationState, LearningStage, ReceiverState, SenderAction, SenderState, Settings, Movement
+from Components import ComputationState, LearningStage, ReceiverAction, ReceiverState, SenderAction, SenderState, Settings, Movement
 from QLearning import QTable
 from Walls import getMyWalls, choosePrizeLocation, isItInTheWalls
 from UI import display_game
@@ -18,9 +18,12 @@ def trainAndTest(trainStatus, testStatus):
 
     test(testStatus, sender, receiver)
 
-def train(status):
+def train(status, testNum):
     earlyBreak = False
-    receiverPossibleActions = [Movement.up, Movement.down, Movement.left, Movement.right]
+    receiverPossibleActions = [ReceiverAction(Movement.up), 
+                                ReceiverAction(Movement.down), 
+                                ReceiverAction(Movement.left), 
+                                ReceiverAction(Movement.right)]
     receiverPossibleStates = []
 
     for x in range(5):
@@ -48,26 +51,31 @@ def train(status):
                                         status.epsilon)
 
 
-    sender, receiver= run(status, earlyBreak,
+    sender, _, receiver, _= run(status, earlyBreak,
             sender,
             receiver,
-            LearningStage.train)
+            LearningStage.train,
+            testNum)
 
-    return sender, receiver, status
+    return sender, receiver
 
 def test(status,
             sender, 
-            receiver):
+            receiver,
+            testNum):
         
-    run(status, False, sender, receiver,
-            LearningStage.test)
+    _, senderRewards, _, receiverRewards = run(status, False, sender, receiver,
+            LearningStage.test, testNum)
+
+    return senderRewards, receiverRewards
 
 
 def run(status, 
         earlyBreak, 
         sender, 
         receiver, 
-        learningStage):
+        learningStage,
+        testNum):
     
     computationState = ComputationState()
     counter = 0
@@ -88,6 +96,10 @@ def run(status,
         senderReward = None
 
         while(True):
+            print("numberOfEpisodes" + str(status.numberOfEpisodes))
+            print("epsilon" + str(status.epsilon))
+            print("episode" + str(currentEpisode))
+            print("numTest" + str(testNum))
             display_game(computationState)
             counter += 1
             if (earlyBreak and counter > 5):
@@ -97,7 +109,7 @@ def run(status,
                 senderReward = 0
                 break
 
-            startReceiverState = ReceiverState(computationState.receiverX, computationState.receiverY, senderAction)
+            startReceiverState = ReceiverState(computationState.receiverX, computationState.receiverY, senderAction.message)
             # choosing next action
             receiverAction = receiver.choose(startReceiverState, learningStage)
 
@@ -111,9 +123,6 @@ def run(status,
                 desiredX = desiredX - 1
             if receiverAction.movement == Movement.right:
                 desiredX = desiredX + 1
-            print("direction", receiverAction.movement)
-
-            print("desire", desiredX, desiredY)
             
             if (desiredX < 0 or desiredX > 4 or desiredY < 0 or desiredY > 4):
                 receiveReward = 0
@@ -132,16 +141,17 @@ def run(status,
                 receiveReward = 1
                 foundPrize = True
 
-            endReceiverState = ReceiverState(computationState.receiverX, computationState.receiverY, senderAction)
+            endReceiverState = ReceiverState(computationState.receiverX, computationState.receiverY, senderAction.message)
 
             receiverRewards.append(receiveReward)
 
-            receiver.updateQtable(
-                startReceiverState, 
-                receiverAction, 
-                endReceiverState, 
-                receiveReward, 
-                currentEpisode)
+            if learningStage == LearningStage.train:
+                receiver.updateQtable(
+                    startReceiverState, 
+                    receiverAction, 
+                    endReceiverState, 
+                    receiveReward, 
+                    currentEpisode)
 
             if (foundPrize):
                 senderReward = 1
@@ -150,10 +160,11 @@ def run(status,
         endSenderState = SenderState(0, 0)
 
         senderRewards.append(senderReward)
-        sender.updateQtable(startSenderState, 
-                    senderAction, 
-                    endSenderState, 
-                    senderReward,
-                    currentEpisode)
+        if learningStage == LearningStage.train:
+            sender.updateQtable(startSenderState, 
+                        senderAction, 
+                        endSenderState, 
+                        senderReward,
+                        currentEpisode)
 
-    return sender, receiver
+    return sender, senderRewards, receiver, receiverRewards

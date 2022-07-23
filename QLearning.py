@@ -34,7 +34,15 @@ class QTable():
 
     def updateTable(self, state, action, newState, reward, currentEpisode):
         currentAlpha = self.startAlpha - ((self.startAlpha) - (self.endAlpha))*(currentEpisode/self.numberEpisodes)
+        if (currentAlpha < 0):
+            assert(False)
         value = currentAlpha * (reward + self.discountFactor*self.maxQvalue(newState) - self.get(state, action))
+        if value != value:
+            assert(False)
+            print("what is going on")
+        if (math.isinf(value)):
+            assert(False)
+            print("can not happen")
         self.add(state, action, value)
         
 

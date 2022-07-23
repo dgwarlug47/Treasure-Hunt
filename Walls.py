@@ -5,7 +5,7 @@ import random
 
 def getMyWalls(status, computationalState):
     if status.wallType == WallType.fourRoom:
-        fourRoomWallGenerator(status, computationalState)
+        fourRoomWallGenerator(computationalState)
     elif status.wallType == WallType.standard:
         standardWallGenerator(status, computationalState)
     elif status.wallType == WallType.empty:
@@ -36,12 +36,12 @@ def emptyWallGenerator(computationalState):
 
 def fourRoomWallGenerator(computationState):
     computationState.walls = [
-        Point(0,3),
-        Point(1,3),
-        Point(3,3),
-        Point(4,3),
-        Point(3,0),
-        Point(3,4),
+        Point(0,2),
+        Point(1,2),
+        Point(3,2),
+        Point(4,2),
+        Point(2,0),
+        Point(2,4),
     ]
 
 def choosePrizeLocation(computationState):

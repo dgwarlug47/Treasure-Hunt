@@ -1,7 +1,5 @@
 import enum
 from shutil import move
-import json
-
 
 class Movement(enum.Enum):
     up = 1
@@ -42,12 +40,15 @@ class ReceiverAction(Action):
         self.movement = movement
         if movement == Movement.up:
             self.id = "up"
-        if movement == Movement.down:
+        elif movement == Movement.down:
             self.id = "down"
-        if movement == Movement.left:
+        elif movement == Movement.left:
             self.id = "left"
-        if movement == Movement.right:
+        elif movement == Movement.right:
             self.id = "right"
+        else:
+            assert(False)
+
 
 class Point():
     def __init__(self, x, y) -> None:
@@ -60,6 +61,7 @@ class Settings():
         self.numberOfEpisodes = None
         self.boardWidth = 5
         self.boardHeight = 5
+        self.senderInputSize = None
         self.wallProbability = None
         self.terminationProbability = None
         self.wallType = None
