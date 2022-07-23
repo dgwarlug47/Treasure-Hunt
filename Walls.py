@@ -1,7 +1,7 @@
 import random
 from scipy.stats import bernoulli
 from Components import Point
-def wallGenerator(status):
+def standardWallGenerator(status):
     status.walls = []
     for xCoordinate in range(status.boardWidth):
         for yCoordinate in range(status.boardHeight):
@@ -18,7 +18,10 @@ def wallGenerator(status):
                     status.walls.add(Point(xCoordinate, yCoordinate))
 
     if (len(status.walls) == status.boardWidth*status.boardHeight):
-        wallGenerator(status)
+        standardWallGenerator(status)
+
+def emptyWallGenerator(status):
+    status.walls = []
 
 import random
 def choosePrizeLocation(status):

@@ -31,7 +31,6 @@ class QTable():
         for action in self.actions:
             maxQvalue = max(maxQvalue, self.get(state, action))
         return maxQvalue
-            
 
     def updateTable(self, state, action, newState, reward, currentEpisode):
         currentAlpha = self.startAlpha - ((self.startAlpha) - (self.endAlpha))*(currentEpisode/self.numberEpisodes)

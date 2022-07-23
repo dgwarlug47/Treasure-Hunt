@@ -23,6 +23,9 @@ class StandardActionManagement():
         else:
             return self._bestAction(state)
     
+    def updateQtable(self, state, action, newState, reward, currentEpisode):
+        self.qtable.updateTable(state, action, newState, reward, currentEpisode)
+
     def _bestAction(self, state):
         bestAction = None
         bestQValue = - math.inf

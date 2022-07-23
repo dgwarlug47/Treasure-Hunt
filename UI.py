@@ -1,4 +1,5 @@
 from Components import Point
+
 def display_game(grid_sizex, grid_sizey, status):
     walls = status.walls
     xprize = status.xPrize
