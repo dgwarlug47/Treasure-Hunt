@@ -1,14 +1,14 @@
 from Components import Point
 
-def display_game(grid_sizex, grid_sizey, status):
-    walls = status.walls
-    xprize = status.xPrize
-    yprize = status.yPrize
-    currentX = status.receiverX
-    currentY = status.receiverY
+def display_game(comp):
+    walls = comp.walls
+    xprize = comp.xPrize
+    yprize = comp.yPrize
+    currentX = comp.receiverX
+    currentY = comp.receiverY
     ans = ''
-    for y in range(grid_sizey):
-        for x in range(grid_sizex):
+    for y in range(5):
+        for x in range(5):
             newChar = '~'
             if (x==currentX and y ==currentY):
                 newChar = 'J'

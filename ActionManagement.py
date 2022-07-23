@@ -10,10 +10,10 @@ from Components import LearningStage, Movement, ReceiverAction
 from QLearning import QTable
 
 class StandardActionManagement():
-    def __init__(self, states, actions, numberOfEpisodes) -> None:
+    def __init__(self, states, actions, numberOfEpisodes, epsilon) -> None:
         self.qtable = QTable(states, actions, numberOfEpisodes)
         self.actions = actions
-        self.epsilon = 0.2
+        self.epsilon = epsilon
 
     def choose(self, state, learningStage):
         coinFlip = bernoulli(self.epsilon).rvs(1)[0]

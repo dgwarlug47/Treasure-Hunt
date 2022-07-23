@@ -55,12 +55,18 @@ class Point():
         self.y = y
 
 
-class Status():
-    def __init__(self, numberOfEpisodes) -> None:
-        self.numberOfEpisodes = numberOfEpisodes
+class Settings():
+    def __init__(self) -> None:
+        self.numberOfEpisodes = None
         self.boardWidth = 5
         self.boardHeight = 5
         self.wallProbability = None
+        self.terminationProbability = None
+        self.wallType = None
+        self.epsilon = None
+
+class ComputationState():
+    def __init__(self) -> None:
         self.xPrize = None
         self.yPrize =  None
         self.walls = []
@@ -68,15 +74,12 @@ class Status():
         self.receiverX = None
         self.receiverY = None
 
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, 
-            sort_keys=True, indent='\n')
-
-
-    def __repr__(self) -> str:
-        return json.dumps(self.toJSON())
-
-
 class LearningStage(enum.Enum):
     train = 1
     test = 2
+
+class WallType(enum.Enum):
+    maze = 1
+    fourRoom = 2
+    empty = 3
+    standard = 4

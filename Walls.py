@@ -1,8 +1,19 @@
 import random
 from scipy.stats import bernoulli
-from Components import Point
-def standardWallGenerator(status):
-    status.walls = []
+from Components import Point, WallType
+import random
+
+def getMyWalls(status, computationalState):
+    if status.wallType == WallType.fourRoom:
+        fourRoomWallGenerator(status, computationalState)
+    elif status.wallType == WallType.standard:
+        standardWallGenerator(status, computationalState)
+    elif status.wallType == WallType.empty:
+        emptyWallGenerator(computationalState)
+    
+
+def standardWallGenerator(status, computationalState):
+    computationalState.walls = []
     for xCoordinate in range(status.boardWidth):
         for yCoordinate in range(status.boardHeight):
             if (xCoordinate == 2 and yCoordinate == 2):
@@ -10,39 +21,48 @@ def standardWallGenerator(status):
             coinFlip = bernoulli(status.wallProbability).rvs(1)[0]
             if (coinFlip == 1):
                 alreadyThere = False
-                for point in status.walls:
+                for point in computationalState.walls:
                     if (xCoordinate == point.x and yCoordinate == point.y):
                         alreadyThere = True
                         break
                 if not alreadyThere:
-                    status.walls.add(Point(xCoordinate, yCoordinate))
+                    computationalState.walls.add(Point(xCoordinate, yCoordinate))
 
-    if (len(status.walls) == status.boardWidth*status.boardHeight):
-        standardWallGenerator(status)
+    if (len(computationalState.walls) == status.boardWidth*status.boardHeight - 1):
+        standardWallGenerator(status, computationalState)
 
-def emptyWallGenerator(status):
-    status.walls = []
+def emptyWallGenerator(computationalState):
+    computationalState.walls = []
 
-import random
-def choosePrizeLocation(status):
+def fourRoomWallGenerator(computationState):
+    computationState.walls = [
+        Point(0,3),
+        Point(1,3),
+        Point(3,3),
+        Point(4,3),
+        Point(3,0),
+        Point(3,4),
+    ]
+
+def choosePrizeLocation(computationState):
     xprize = None
     yprize = None
 
     while (True):
-        xprize = random.choice(list(range(status.boardWidth)))
-        yprize = random.choice(list(range(status.boardHeight)))
+        xprize = random.choice(list(range(5)))
+        yprize = random.choice(list(range(5)))
         if (xprize == 2 and yprize == 2):
             continue
         alreadyThere = False
-        for point in status.walls:
+        for point in computationState.walls:
             if (point.x == xprize and point.y == yprize):
                 alreadyThere = True
                 break
         if not alreadyThere:
             break
     
-    status.xPrize = xprize
-    status.yPrize = yprize
+    computationState.xPrize = xprize
+    computationState.yPrize = yprize
 
 def isItInTheWalls(x, y, walls):
     isAlreadyThere = False
