@@ -1,15 +1,15 @@
 from components import Question, WallType
 from experiment import experiment
 
-# Neps = [10, 100, 1000, 10000, 50000, 100000]
-Neps = [10, 100]
+Neps = [10, 100, 1000, 10000, 50000, 100000]
+# Neps = [10, 100]
 num_tests = 10
 
 question = Question.c
 
 if question == Question.c:
-    # epsilons = [0.01, 0.1, 0.4]
-    epsilons = [0.1, 0.4]
+    epsilons = [0.01, 0.1, 0.4]
+    # epsilons = [0.1, 0.4]
 
     senderInputSizes = [4]
     wallType = WallType.fourRoom
