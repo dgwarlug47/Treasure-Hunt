@@ -86,6 +86,13 @@ class WallType(enum.Enum):
     empty = 3
     standard = 4
 
+class Question(enum.Enum):
+    c = 1
+    d = 2
+    e = 3
+    f = 4
+    g = 5
+
 class RewardsInEpisode():
     def __init__(self) -> None:
         self.rewards = []

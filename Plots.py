@@ -1,39 +1,43 @@
 import matplotlib.pyplot as plt
 import math
 
-def customPlot(Neps, epsilons, aggregatedResults, title):
-    for epsilon in epsilons:
+def customPlot(Neps, secondVariables, legendPrefix, aggregatedResults, title):
+    legends = []
+    for secondVariable in secondVariables:
         xAr = []
         yAr = []
         yerr = []
         for Nep in Neps:
             xAr.append(math.log(Nep))
-            yAr.append(aggregatedResults[(epsilon, Nep, 'mean')])
-            yerr.append(aggregatedResults[(epsilon, Nep, 'error')])
-        plt.errorbar(xAr, yAr, yerr)
+            yAr.append(aggregatedResults[(Nep, secondVariable, 'mean')])
+            yerr.append(aggregatedResults[(Nep, secondVariable, 'error')])
+        plt.errorbar(xAr, yAr, yerr, fmt = 'o',
+            elinewidth = 0, capsize=10)
         plt.xlabel('log(Nep)')
-        plt.ylabel('discouted reward')
-        plt.title(title + ', epsilon=' + str(epsilon))
-        plt.show()
+        plt.ylabel('discouted reward') 
+        legends.append(legendPrefix + ' = ' + str(secondVariable))
+    plt.gca().legend(legends)
+    plt.title(title)
+    plt.show()
 
 Neps = [10, 100]
 epsilons = [0.3, 0.5]
 
 aggregatedResults = {}
 
-aggregatedResults[(0.3, 10, 'mean')] = 1
-aggregatedResults[(0.3, 10, 'error')] = 1
+aggregatedResults[(10, 0.3, 'mean')] = 1
+aggregatedResults[(10, 0.3, 'error')] = 1
 
-aggregatedResults[(0.3, 100, 'mean')] = 4
-aggregatedResults[(0.3, 100, 'error')] = 8
+aggregatedResults[(100, 0.3, 'mean')] = 4
+aggregatedResults[(100, 0.3, 'error')] = 8
 
-aggregatedResults[(0.5, 10, 'mean')] = 9
-aggregatedResults[(0.5, 10, 'error')] = 12
+aggregatedResults[(10, 0.5, 'mean')] = 9
+aggregatedResults[(10, 0.5, 'error')] = 12
 
 
-aggregatedResults[(0.5, 100, 'mean')] = 1
-aggregatedResults[(0.5, 100, 'error')] = 10
+aggregatedResults[(100, 0.5, 'mean')] = 1
+aggregatedResults[(100, 0.5, 'error')] = 10
 
-# customPlot(Neps, epsilons, aggregatedResults, 'depende')
+# customPlot(Neps, epsilons, 'epsilon', aggregatedResults, 'depende')
 
 

@@ -1,6 +1,6 @@
 import random
 from scipy.stats import bernoulli
-from Components import Point, WallType
+from components import Point, WallType
 import random
 
 def getMyWalls(status, computationalState):
@@ -10,6 +10,10 @@ def getMyWalls(status, computationalState):
         standardWallGenerator(status, computationalState)
     elif status.wallType == WallType.empty:
         emptyWallGenerator(computationalState)
+    elif status.wallType == WallType.maze:
+        mazeWallGenerator(computationalState)
+    else:
+        assert(False)
     
 
 def standardWallGenerator(status, computationalState):
@@ -42,6 +46,19 @@ def fourRoomWallGenerator(computationState):
         Point(4,2),
         Point(2,0),
         Point(2,4),
+    ]
+
+def mazeWallGenerator(computationState):
+    computationState.walls = [
+        Point(1,1),
+        Point(2,1),
+        Point(3,1),
+        Point(3,2),
+        Point(1,3),
+        Point(1,4),
+        Point(2,4),
+        Point(3,4),
+        Point(4,4)
     ]
 
 def choosePrizeLocation(computationState):
