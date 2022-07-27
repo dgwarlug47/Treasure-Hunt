@@ -4,8 +4,7 @@ from this import s
 from turtle import st
 from scipy.stats import bernoulli
 from ActionManagement import StandardActionManagement
-from Components import ComputationState, LearningStage, ReceiverAction, ReceiverState, SenderAction, SenderState, Settings, Movement
-from QLearning import QTable
+from Components import ComputationState, LearningStage, ReceiverAction, ReceiverState, RewardsInEpisode, SenderAction, SenderState, Settings, Movement
 from Walls import getMyWalls, choosePrizeLocation, isItInTheWalls
 from UI import display_game
 
@@ -82,6 +81,8 @@ def run(status,
     receiverRewards = []
     senderRewards = []
     for currentEpisode in range(status.numberOfEpisodes):
+        inEpisodeSenderRewards = RewardsInEpisode()
+        inEpisodeReceiverRewards = RewardsInEpisode()
         if (earlyBreak and counter > 5):
             break
         print("start new episode: " + str(currentEpisode))
@@ -143,7 +144,7 @@ def run(status,
 
             endReceiverState = ReceiverState(computationState.receiverX, computationState.receiverY, senderAction.message)
 
-            receiverRewards.append(receiveReward)
+            inEpisodeReceiverRewards.add(receiveReward)
 
             if learningStage == LearningStage.train:
                 receiver.updateQtable(
@@ -159,12 +160,14 @@ def run(status,
 
         endSenderState = SenderState(0, 0)
 
-        senderRewards.append(senderReward)
+        inEpisodeSenderRewards.add(senderReward)
         if learningStage == LearningStage.train:
             sender.updateQtable(startSenderState, 
                         senderAction, 
                         endSenderState, 
                         senderReward,
                         currentEpisode)
-
+        
+        senderRewards.append(inEpisodeSenderRewards)
+        receiverRewards.append(inEpisodeReceiverRewards)
     return sender, senderRewards, receiver, receiverRewards

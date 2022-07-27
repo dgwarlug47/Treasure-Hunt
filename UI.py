@@ -1,5 +1,3 @@
-from Components import Point
-
 def display_game(comp):
     walls = comp.walls
     xprize = comp.xPrize

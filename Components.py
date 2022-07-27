@@ -85,3 +85,17 @@ class WallType(enum.Enum):
     fourRoom = 2
     empty = 3
     standard = 4
+
+class RewardsInEpisode():
+    def __init__(self) -> None:
+        self.rewards = []
+        self.discountedFactor = 0.95
+
+    def add(self, reward):
+        self.rewards.append(reward)
+
+    def discountedReward(self):
+        total = 0
+        for index in range(len(self.rewards)):
+            total += self.rewards[index]*pow(self.discountedFactor, index)
+        return total
