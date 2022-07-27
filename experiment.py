@@ -54,18 +54,18 @@ def experiment(Neps, epsilons, senderInputSizes, wallType, num_tests, secondVari
                     sameConfigSenderRewards.append(testSenderRewards)
                 
                 if secondVariableName == 'epsilon':
-                    receiverResultsAggreagators[(epsilon, Nep, 'mean')] = computeAverageDiscountReward(sameConfigReceiverRewards)
-                    senderResultsAggreagators[(epsilon, Nep, 'mean')] = computeAverageDiscountReward(sameConfigSenderRewards)
+                    receiverResultsAggreagators[(Nep, epsilon, 'mean')] = computeAverageDiscountReward(sameConfigReceiverRewards)
+                    senderResultsAggreagators[(Nep, epsilon, 'mean')] = computeAverageDiscountReward(sameConfigSenderRewards)
 
-                    receiverResultsAggreagators[(epsilon, Nep, 'error')] = computeErrorDiscountReward(sameConfigReceiverRewards)
-                    senderResultsAggreagators[(epsilon, Nep, 'error')] = computeErrorDiscountReward(sameConfigSenderRewards)
+                    receiverResultsAggreagators[(Nep, epsilon, 'error')] = computeErrorDiscountReward(sameConfigReceiverRewards)
+                    senderResultsAggreagators[(Nep, epsilon, 'error')] = computeErrorDiscountReward(sameConfigSenderRewards)
 
                 elif secondVariableName == 'senderInputSize':
-                    receiverResultsAggreagators[(senderInputSize, Nep, 'mean')] = computeAverageDiscountReward(sameConfigReceiverRewards)
-                    senderResultsAggreagators[(senderInputSize, Nep, 'mean')] = computeAverageDiscountReward(sameConfigSenderRewards)
+                    receiverResultsAggreagators[(Nep, senderInputSize, 'mean')] = computeAverageDiscountReward(sameConfigReceiverRewards)
+                    senderResultsAggreagators[(Nep, senderInputSize, 'mean')] = computeAverageDiscountReward(sameConfigSenderRewards)
 
-                    receiverResultsAggreagators[(senderInputSize, Nep, 'error')] = computeErrorDiscountReward(sameConfigReceiverRewards)
-                    senderResultsAggreagators[(senderInputSize, Nep, 'error')] = computeErrorDiscountReward(sameConfigSenderRewards)
+                    receiverResultsAggreagators[(Nep, senderInputSize, 'error')] = computeErrorDiscountReward(sameConfigReceiverRewards)
+                    senderResultsAggreagators[(Nep, senderInputSize, 'error')] = computeErrorDiscountReward(sameConfigSenderRewards)
                 
                 else:
                     assert(False)
