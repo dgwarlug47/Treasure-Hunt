@@ -23,11 +23,11 @@ def computeErrorDiscountReward(rewards):
 
 num_tests = 10
 
-#epsilons = [0.01, 0.1, 0.4]
-epsilons = [0.01, 0.1]
+epsilons = [0.01, 0.1, 0.4]
+# epsilons = [0.01, 0.1]
 
-#Neps = [10, 100, 1000, 10000, 50000, 100000]
-Neps = [10]
+Neps = [10, 100, 1000, 10000, 50000, 100000]
+# Neps = [10]
 
 senderRewards = None
 receiverRewards = None

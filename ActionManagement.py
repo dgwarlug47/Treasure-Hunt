@@ -17,7 +17,7 @@ class StandardActionManagement():
     def choose(self, state, learningStage):
         coinFlip = bernoulli(self.epsilon).rvs(1)[0]
 
-        if (coinFlip == 0 and learningStage == LearningStage.train):
+        if (coinFlip == 1 and learningStage == LearningStage.train):
             return random.choice(self.actions)
         else:
             return self._bestAction(state)

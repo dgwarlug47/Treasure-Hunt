@@ -6,7 +6,7 @@ from scipy.stats import bernoulli
 from ActionManagement import StandardActionManagement
 from Components import ComputationState, LearningStage, ReceiverAction, ReceiverState, RewardsInEpisode, SenderAction, SenderState, Settings, Movement
 from Walls import getMyWalls, choosePrizeLocation, isItInTheWalls
-from UI import display_game
+from gridUI import display_game
 
 def startNewEpisode(status, computationalState):
     getMyWalls(status, computationalState)

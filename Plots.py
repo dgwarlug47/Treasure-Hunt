@@ -1,9 +1,7 @@
-from tkinter import N
 import matplotlib.pyplot as plt
 import math
 
 def customPlot(Neps, epsilons, aggregatedResults, title):
-    legends = []
     for epsilon in epsilons:
         xAr = []
         yAr = []
@@ -13,10 +11,10 @@ def customPlot(Neps, epsilons, aggregatedResults, title):
             yAr.append(aggregatedResults[(epsilon, Nep, 'mean')])
             yerr.append(aggregatedResults[(epsilon, Nep, 'error')])
         plt.errorbar(xAr, yAr, yerr)
-        legends.append("epsilon = " + str(epsilon))
-    plt.gca().legend(legends)
-    plt.title(title)
-    plt.show()
+        plt.xlabel('log(Nep)')
+        plt.ylabel('discouted reward')
+        plt.title(title + ', epsilon=' + str(epsilon))
+        plt.show()
 
 Neps = [10, 100]
 epsilons = [0.3, 0.5]
@@ -36,6 +34,6 @@ aggregatedResults[(0.5, 10, 'error')] = 12
 aggregatedResults[(0.5, 100, 'mean')] = 1
 aggregatedResults[(0.5, 100, 'error')] = 10
 
-customPlot(Neps, epsilons, aggregatedResults, 'depende')
+# customPlot(Neps, epsilons, aggregatedResults, 'depende')
 
 
