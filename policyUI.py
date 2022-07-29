@@ -22,7 +22,7 @@ def policyUI(receiverActionManagement, senderInputSize):
                 else:
                     assert(False)
                 ans += '|'
-            ans += '|'
+            ans += '\n'
         print(ans)
 
 

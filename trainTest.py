@@ -76,15 +76,33 @@ def run(status,
     counter = 0
     receiverRewards = []
     senderRewards = []
+    startSenderState = None
+    senderAction = None
+    senderReward = None
     for currentEpisode in range(status.numberOfEpisodes):
         inEpisodeSenderRewards = RewardsInEpisode()
         inEpisodeReceiverRewards = RewardsInEpisode()
         if (earlyBreak and counter > 5):
             break
-        print("start new episode: " + str(currentEpisode))
+        if (currentEpisode % 200 == 0):
+            print("")
+            print("numberOfEpisodes" + str(status.numberOfEpisodes))
+            print("epsilon" + str(status.epsilon))
+            print("senderInputSize" + str(status.senderInputSize))
+            print("episode" + str(currentEpisode))
+            print("numTest" + str(testNum))
         startNewEpisode(status, computationState)
+        prevSenderState = startSenderState
         startSenderState = SenderState(computationState.xPrize, 
                         computationState.yPrize)
+        
+        prevSenderAction = senderAction
+        if learningStage == LearningStage.train and prevSenderState != None:
+            sender.updateQtable(prevSenderState, 
+                        prevSenderAction, 
+                        startSenderState, 
+                        senderReward,
+                        currentEpisode)
         
         senderAction = sender.choose(startSenderState, LearningStage.train)
         computationState.receiverX = 2
@@ -92,12 +110,8 @@ def run(status,
         receiveReward = None
         senderReward = None
 
-        while(True):
-            print("numberOfEpisodes" + str(status.numberOfEpisodes))
-            print("epsilon" + str(status.epsilon))
-            print("episode" + str(currentEpisode))
-            print("numTest" + str(testNum))
-            display_game(computationState)
+        while(True):            
+            # display_game(computationState)
             counter += 1
             if (earlyBreak and counter > 5):
                 break
@@ -154,15 +168,7 @@ def run(status,
                 senderReward = 1
                 break
 
-        endSenderState = SenderState(0, 0)
-
         inEpisodeSenderRewards.add(senderReward)
-        if learningStage == LearningStage.train:
-            sender.updateQtable(startSenderState, 
-                        senderAction, 
-                        endSenderState, 
-                        senderReward,
-                        currentEpisode)
         
         senderRewards.append(inEpisodeSenderRewards)
         receiverRewards.append(inEpisodeReceiverRewards)

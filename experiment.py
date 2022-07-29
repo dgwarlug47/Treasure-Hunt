@@ -1,4 +1,3 @@
-from components import ReceiverAction
 from plots import customPlot
 from experimentSetting import getTrainTestStatus
 from policyUI import policyUI
@@ -25,18 +24,8 @@ def computeErrorDiscountReward(rewards):
 
 num_tests = 10
 
-epsilons = [0.01, 0.1, 0.4]
-# epsilons = [0.01, 0.1]
-
-Neps = [10, 100, 1000, 10000, 50000, 100000]
-# Neps = [10]
-
 def experiment(Neps, epsilons, senderInputSizes, wallType, num_tests, secondVariableName):
-    testSenderRewards = None
-    testReceiverRewards = None
     receiverResultsAggreagators = {}
-
-
     senderResultsAggreagators = {}
 
     for epsilon in epsilons:
@@ -66,7 +55,6 @@ def experiment(Neps, epsilons, senderInputSizes, wallType, num_tests, secondVari
 
                     receiverResultsAggreagators[(Nep, senderInputSize, 'error')] = computeErrorDiscountReward(sameConfigReceiverRewards)
                     senderResultsAggreagators[(Nep, senderInputSize, 'error')] = computeErrorDiscountReward(sameConfigSenderRewards)
-                
                 else:
                     assert(False)
 
@@ -75,6 +63,6 @@ def experiment(Neps, epsilons, senderInputSizes, wallType, num_tests, secondVari
         customPlot(Neps, epsilons, secondVariableName, senderResultsAggreagators, "sender")
     elif secondVariableName == 'senderInputSize':
         customPlot(Neps, senderInputSizes, secondVariableName, receiverResultsAggreagators, "receiver")
-        customPlot(Neps, senderInputSize, secondVariableName, senderResultsAggreagators, "sender")
+        customPlot(Neps, senderInputSizes, secondVariableName, senderResultsAggreagators, "sender")
     else:
         assert(False)
