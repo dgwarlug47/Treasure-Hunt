@@ -7,4 +7,4 @@ Once every episode starts, the sender sends a message to receiver (the message i
 The Receiver receives the message and moves around the grid, until it
 finds where the prize is. Its goal is to find the prize as soon as possible.
 
-The main point of this exercise is for the agents to create a communication between them. They need create a meaning for each message that both of them can understand. The models used were $$\epsilon$$
+The main point of this exercise is for the agents to create a communication between them. They need create a meaning for each message that both of them can understand. The models used were $$\epsilon-greedy$$ qlearning
