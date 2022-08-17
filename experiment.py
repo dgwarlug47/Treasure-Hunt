@@ -66,3 +66,6 @@ def experiment(Neps, epsilons, senderInputSizes, wallType, num_tests, secondVari
         customPlot(Neps, senderInputSizes, secondVariableName, senderResultsAggreagators, "sender")
     else:
         assert(False)
+    
+    print("receiverResultsAggregators", receiverResultsAggreagators)
+    print("senderResultsAggregators", senderResultsAggreagators)

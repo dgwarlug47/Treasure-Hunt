@@ -3,7 +3,7 @@ from actionManagement import StandardActionManagement
 from components import ComputationState, LearningStage, ReceiverAction, ReceiverState, RewardsInEpisode, SenderAction, SenderState, Settings, Movement
 from Walls import getMyWalls, choosePrizeLocation, isItInTheWalls
 from gridUI import display_game
-
+import time
 def startNewEpisode(status, computationalState):
     getMyWalls(status, computationalState)
     choosePrizeLocation(computationalState)
@@ -79,13 +79,17 @@ def run(status,
     startSenderState = None
     senderAction = None
     senderReward = None
+    tim=None
     for currentEpisode in range(status.numberOfEpisodes):
         inEpisodeSenderRewards = RewardsInEpisode()
         inEpisodeReceiverRewards = RewardsInEpisode()
         if (earlyBreak and counter > 5):
             break
         if (currentEpisode % 200 == 0):
-            print("")
+            lastTime = tim
+            tim = time.time()
+            if (lastTime != None):
+                print("time, ", str(tim - lastTime))
             print("numberOfEpisodes" + str(status.numberOfEpisodes))
             print("epsilon" + str(status.epsilon))
             print("senderInputSize" + str(status.senderInputSize))
@@ -104,7 +108,7 @@ def run(status,
                         senderReward,
                         currentEpisode)
         
-        senderAction = sender.choose(startSenderState, LearningStage.train)
+        senderAction = sender.choose(startSenderState, learningStage)
         computationState.receiverX = 2
         computationState.receiverY = 2
         receiveReward = None
