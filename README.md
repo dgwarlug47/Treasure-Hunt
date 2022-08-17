@@ -1,7 +1,7 @@
 # Treasure-Hunt
 
 This is a reinforcement learning game.
-We have a 4x4 grid with some walls, and a prize in a hidden location. 
+We have a 5x5 grid with some walls, and a prize in a hidden location. 
 One Player is the receiver and the other player is the sender.
 Once every episode starts, the sender sends a message to receiver (the message is just an integer) so a priori the message has no meaning.
 The Receiver receives the message and moves around the grid, until it
